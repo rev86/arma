@@ -28,7 +28,7 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
   sleep 1;
   _bot disableAI "ANIM";
   _bot disableAI "AUTOTARGET";
-  _bot setCombatMode "GREEN";
+  _bot setCombatMode "YELLOW";
   _bot switchMove "AinvPknlMstpSnonWnonDnon_G01";
 
   sleep (3 + floor (random (10)));

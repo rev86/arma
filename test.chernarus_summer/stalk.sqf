@@ -30,7 +30,7 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
     //spawn loot
     [_plannedLocation, 300] execVM "spawnLoot.sqf";
     //_bot disableAI "AUTOTARGET";
-    _bot setCombatMode "GREEN";
+    //_bot setCombatMode "GREEN";
     _bot doMove _plannedLocation;
 
     waitUntil {_bot distance2D _plannedLocation < 15};
@@ -61,8 +61,8 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
     _i = 0;
     {
        sleep 1;
-       //_bot disableAI "AUTOTARGET";
-       _bot setCombatMode "GREEN";
+       _bot disableAI "AUTOTARGET";
+       //_bot setCombatMode "GREEN";
        _j = 0;
        hint format["Going to house %1", _i];
        _bot doMove (getPosATL _x);
@@ -70,8 +70,8 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
        hint format["arriving at house %1", _i];
        _allBuildingPositions = _x buildingPos -1;
        //_looting = [_bot,_allBuildingPositions] call compile preprocessFile "gatherBuildingLoot.sqf";
-       _looting = [_bot,30] execVM "gatherLoot.sqf";
-       waitUntil {scriptDone _looting;};
+       _looting = [_bot,_allBuildingPositions] execVM "gatherBuildingLoot.sqf";
+       waitUntil {scriptDone _looting };
        /*
        if (count _allBuildingPositions != 0) then {
        {
