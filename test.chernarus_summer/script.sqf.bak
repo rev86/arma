@@ -1,0 +1,99 @@
+[] call compile preprocessFileLineNumbers "functions.sqf";
+
+_bots = _this select 0;
+
+{
+_position = 0;
+_name = 1;
+_straightPositions = [];
+
+_aeroPosition = getMarkerPos "aero";
+_azimuthToAero = p1 getDir _aeroPosition;
+_distanceToAero = p1 distance2D _aeroPosition;
+
+_closestVillages = [p1, "NameVillage", 50, _distanceToAero, "false"] call fncGetAll;
+
+{
+    _townPosition = (_x select _position);
+    _townName = (_x select _name);
+    _azimuth = p1 getDir _townPosition;
+
+    if (abs(_azimuthToAero - _azimuth) < 30) then {
+        _straightPositions pushBack _townPosition;
+        _m4 = createMarker[format ["%1", _townName], _townPosition];
+        _m4 setMarkerShape "ICON";
+        _m4 setMarkerType "hd_dot";
+        _m4 setMarkerColor "ColorRed";
+    };
+
+}forEach _closestVillages;
+
+_firstLocation = _straightPositions select 0;
+//spawn loot
+[_firstLocation, 300] execVM "loot.sqf";
+p1 move (_firstLocation);
+
+waitUntil {p1 distance2D _firstLocation < 15};
+
+hint "arrived!";
+
+_buildings = nearestObjects [p1, ["building"], 300];
+_buildingsCount = count _buildings;
+_counter = 0;
+_enterableBuildings = [];
+_nBuilding = [];
+
+while {_counter < _buildingsCount} do
+{
+    sleep 0.01;
+	_isEnterable = false;
+	_nBuilding = (_buildings select _counter);
+	//_isEnterable = [_nBuilding] call BIS_fnc_isBuildingEnterable;
+
+	           _numDoors = getNumber (configFile >> "CFGVehicles" >> typeOf _nBuilding >> "numberOfDoors");
+
+                if (_numDoors != 0) then {
+
+                    _door_pos = _nBuilding selectionPosition (format ["Door_%1_trigger", _numDoors]);
+                    _isEnterable = true;
+                };
+
+	if (_isEnterable ) then {
+	    _enterableBuildings pushBack _nBuilding;
+	    _m4 = createMarker[format ["%1", _counter], position _nBuilding];
+                _m4 setMarkerShape "ICON";
+                _m4 setMarkerType "hd_dot";
+                _m4 setMarkerColor "ColorRed";
+	};
+	_counter = _counter + 1;
+};
+
+
+hint str(count _enterableBuildings);
+_i = 0;
+{
+   _j = 0;
+   p1 move (position _x);
+   waitUntil {p1 distance2D _x < 20};
+   //hint format["arriving at house %1", _i];
+   _allpositions = _x buildingPos -1;
+   if (count _allpositions != 0) then {
+   {
+         p1 doMove (_x);
+         waitUntil {p1 distance2D _x < 1};
+         //hint format["arriving at house position %1", _j];
+         {hint typeOf _x; sleep 1;} forEach (p1 nearEntities 4);
+         sleep 5;
+         _j = _j + 1;
+      }forEach _allpositions;
+   };
+   _i = _i + 1;
+}forEach _enterableBuildings;
+} forEach _bots;
+
+
+
+
+
+
+
