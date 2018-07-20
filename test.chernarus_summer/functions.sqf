@@ -37,7 +37,7 @@ fncGetAll = {
         if (_i == _count) exitWith{};
         _townName =  (text _x);
         _townPos = (position _x);
-        _results pushBack [_townPos,_townName];
+        _results pushBack _x;
 
         if (_debug == "true") then {
                 deleteMarker format ["%1", _townName];

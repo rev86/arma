@@ -31,7 +31,10 @@ _lootingTimeout = diag_tickTime + (5*60);
    };
 }forEach _buildingPositions;
 
-hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLootHolders];
+//randomize order of looting for each bot
+_nearbyLootHolders = _nearbyLootHolders call BIS_fnc_arrayShuffle;
+
+//hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLootHolders];
 
 {
  sleep 1;
@@ -39,13 +42,14 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
  if ((_pos select 0) + (_pos select 1) + (_pos select 2) != 0) then
  {
  _bot doMove (_pos);
-  hint format ["Moving to position %1", _pos];
+ _bot setVariable["destination", _pos];
+  //hint format ["Moving to position %1", _pos];
 
   waitUntil{_bot distance2D _pos < 2};
   sleep 1;
   _bot disableAI "ANIM";
   _bot disableAI "AUTOTARGET";
-  _bot setCombatMode "YELLOW";
+  //_bot setCombatMode "YELLOW";
   _bot switchMove "AinvPknlMstpSnonWnonDnon_G01";
 
   sleep (3 + floor (random (10)));
@@ -53,7 +57,7 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
   _itemsInHolder = itemCargo _x;
   if (alive _bot && (count _itemsInHolder != 0)) then
   {
-     hint format["Found items:%1", str(_itemsInHolder)];
+     //hint format["Found items:%1", str(_itemsInHolder)];
      //sleep 3;
      {
         if(!(_x in items _bot)) then
@@ -74,14 +78,14 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
    _weaponsInHolder = weaponCargo _x;
    if (alive _bot && (count _weaponsInHolder != 0)) then
    {
-       hint format["Found weapons:%1", str(_weaponsInHolder)];
+       //hint format["Found weapons:%1", str(_weaponsInHolder)];
        //sleep 3;
        {
           if (!(_x in weapons _bot) || (([_bot,_x] call fncHasWeaponClass == "true") && (50 < random 100))) then
           {
              //if (([_bot,_x] call fncHasWeaponClass == "false") || (([_bot,_x] call fncHasWeaponClass == "true") && (1==1))) then
              //{
-               hint "I wil take this weapon";
+               //hint "I wil take this weapon";
                //sleep 1;
                _weaponType = _x call fncGetWeaponType;
                switch (_weaponType) do {
@@ -99,7 +103,7 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
               _weaponsToAdd pushBack _x;
               //sleep 1;
            };
-          hint format["_weaponsToAdd=%1", str _weaponsToAdd]; sleep 2;
+          //hint format["_weaponsToAdd=%1", str _weaponsToAdd]; sleep 2;
        }forEach _weaponsInHolder;
        clearWeaponCargo _x;
        //sleep 1;
@@ -109,7 +113,7 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
    if (alive _bot && (count _magazinesInHolder != 0)) then
    {
 
-     hint format["Found magazines:%1", str(_magazinesInHolder)];
+     //hint format["Found magazines:%1", str(_magazinesInHolder)];
      //sleep 3;
      {
         _bot addMagazine _x;
@@ -122,9 +126,9 @@ hint format ["Starting loot gather.Found %1 loot spawn poins", count _nearbyLoot
   {
      _backpack = _backpackInHolder select 0;
      _backpackItems = backpackItems _bot;
-     if (_backpack != backpack _bot) then
+     if (! isNil "_backpack" && _backpack != backpack _bot) then
      {
-         hint format["Found backpack:%1", str(_backpackInHolder)];
+         //hint format["Found backpack:%1", str(_backpackInHolder)];
          clearAllItemsFromBackpack _bot;
          _bot addBackpack (_backpack);
          {_bot addItemToBackpack _x;} forEach _backpackItems;
