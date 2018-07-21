@@ -10,6 +10,16 @@ waituntil {!isnil "bis_fnc_init"};
 
 if(isServer) then {
 
+    _allLocationTypes = ["NameVillage","NameCity","NameLocal"];
+    _allLocations = (nearestLocations [position player,_allLocationTypes,10000]);
+
+    {
+        _locationName = text _x;
+        missionNamespace setVariable [_locationName,[["loot_spawned","false"]]];
+    }forEach _allLocations;
+
+    _loot = [] execVM "spawnLoot.sqf";
+
    {_res1 = [_x] execVM "stalk.sqf";} forEach allUnits;
 //return fleeing bastards to battlefield
    {_res2 = [_x] spawn {

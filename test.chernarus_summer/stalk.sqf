@@ -31,8 +31,8 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
     //spawn loot
     //if ((_x getVariable "loot_spawned") != "true") then
     //{
-        [_plannedLocationPos, 300] execVM "spawnLoot.sqf";
-        _x setVariable["loot_spawned","true"];
+    //    [_x, 300] execVM "spawnLoot.sqf";
+
     //};
     //_bot disableAI "AUTOTARGET";
     //_bot setCombatMode "GREEN";

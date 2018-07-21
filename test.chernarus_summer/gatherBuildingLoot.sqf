@@ -48,7 +48,7 @@ _nearbyLootHolders = _nearbyLootHolders call BIS_fnc_arrayShuffle;
   waitUntil{_bot distance2D _pos < 2};
   sleep 1;
   _bot disableAI "ANIM";
-  _bot disableAI "AUTOTARGET";
+  //_bot disableAI "AUTOTARGET";
   //_bot setCombatMode "YELLOW";
   _bot switchMove "AinvPknlMstpSnonWnonDnon_G01";
 
