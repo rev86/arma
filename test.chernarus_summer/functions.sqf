@@ -30,6 +30,7 @@ fncGetAll = {
     _townNames = [];
     _townPos = [];
     _allLocationTypes = ["NameVillage","NameCity"];
+    //_allLocationTypes = [""];
     _i = 0;
 
     _closestObjects = (nearestLocations [position _object,_allLocationTypes,_distance]);

@@ -106,14 +106,20 @@ _backpacksAray = [
 _itemBoxArray = [];
 _enterableHouseArray = [];
 
-_weaponArray = + _CUPWeaponArray;
-_itemsArray = + _CUPItemsArray;
-_itemsArray = + _CUPMagazinesArray;
+_weaponArray = _weaponArray + _CUPWeaponArray;
+_itemsArray = _itemsArray + _CUPItemsArray;
+_itemsArray = _itemsArray + _CUPMagazinesArray;
+//randomize arrays
+_weaponArray = _weaponArray call BIS_fnc_arrayShuffle;
+_itemsArray = _itemsArray call BIS_fnc_arrayShuffle;
+_backpacksAray = _backpacksAray call BIS_fnc_arrayShuffle;
 
 _allLocationTypes = ["NameVillage","NameCity","NameLocal"];
 _allLocations = (nearestLocations [position player,_allLocationTypes,10000]);
 
-_radius  = 300;
+_radius  = 400;
+
+_allUnits = allUnits select {faction _x != "Ryanzombiesfaction"};
 
 while {true} do
 {
@@ -121,10 +127,11 @@ while {true} do
  {
     _locationName = text _x;
     _locationPos = position _x;
-    _locationLootSpawned = (((missionNamespace getVariable _locationName) select 0) select 1);
+    _lootVar = _locationName + "_lootSpawned";
+    _locationLootSpawned = missionNamespace getVariable _lootVar;
     _unitsInLocation = "false";
 
-    {if (_x  distance2D _locationPos < 400) exitWith{_unitsInLocation = "true";}} forEach allUnits;
+    {if (_x  distance2D _locationPos < 400) exitWith{_unitsInLocation = "true";}} forEach _allUnits;
 
     if ( _locationLootSpawned != "true" && _unitsInLocation == "true") then
     {
@@ -149,18 +156,18 @@ while {true} do
 
                     _itemBox setPos _x;
 
-                    if (10 > random 100) then {
+                    if (50 > random 100) then {
                         _itemBox addWeaponCargoGlobal [_weapon,1];
                         _lootInItemBox = "true";
                     };
                     _magazines = getArray (configFile >> "CfgWeapons" >> _weapon >> "magazines");
                     _mag = _magazines select (floor (random (count _magazines)));
-                    if (30 > random 100) then {
+                    if (101 > random 100) then {
                         _itemBox addMagazineCargoGlobal [_mag,2];
                         _lootInItemBox = "true";
                     };
                     _item = _itemsArray select (floor (random (count _itemsArray)));
-                    if (50 > random 100) then {
+                    if (35 > random 100) then {
                         _itembox addItemCargoGlobal [_item,1];
                         _lootInItemBox = "true";
                     };
@@ -179,7 +186,7 @@ while {true} do
             };
         } forEach _enterableHouseArray;
 
-        missionNamespace setVariable [_locationName,[["loot_spawned","true"]]];
+        missionNamespace setVariable [_lootVar,"true"];
         hint format ["Loot spawned at location %1!", _locationName]; sleep 1;
     };
  }forEach _allLocations;

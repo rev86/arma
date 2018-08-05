@@ -25,6 +25,8 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
     };
 
 }forEach _closestVillages;
+
+
 //loop trough planned locations
 {
     _plannedLocationPos = position _x;
@@ -41,7 +43,7 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
 
     waitUntil {_bot distance2D _plannedLocationPos < 15};
 
-    hint "arrived!";
+    //hint "arrived!";
 
     _buildings = nearestObjects [_bot, ["building"], 300];
     _buildingsCount = count _buildings;
@@ -51,7 +53,7 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
 //find enterable buildings
     while {_counter < _buildingsCount} do
     {
-        sleep 0.01;
+        //sleep 0.01;
         _isEnterable = false;
         _nBuilding = (_buildings select _counter);
         //_isEnterable = [_nBuilding] call BIS_fnc_isBuildingEnterable;
@@ -65,18 +67,18 @@ _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
     _enterableBuildings = _enterableBuildings call BIS_fnc_arrayShuffle;
 
 //stalk trough buildings
-    hint str(count _enterableBuildings);
+    //hint str(count _enterableBuildings);
     _i = 0;
     {
-       sleep 1;
-       _bot disableAI "AUTOTARGET";
+       //sleep 1;
+       //_bot disableAI "AUTOTARGET";
        //_bot setCombatMode "GREEN";
        _j = 0;
-       hint format["Going to house %1", _i];
+       //hint format["Going to house %1", _i];
        _bot doMove (getPosATL _x);
        _bot setVariable["destination", getPosATL _x];
        waitUntil {_bot distance2D _x < 10};
-       hint format["arriving at house %1", _i];
+       //hint format["arriving at house %1", _i];
        _allBuildingPositions = _x buildingPos -1;
        //_looting = [_bot,_allBuildingPositions] call compile preprocessFile "gatherBuildingLoot.sqf";
        _looting = [_bot,_allBuildingPositions] execVM "gatherBuildingLoot.sqf";
