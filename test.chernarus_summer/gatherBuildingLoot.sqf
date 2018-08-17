@@ -46,6 +46,10 @@ _nearbyLootHolders = _nearbyLootHolders call BIS_fnc_arrayShuffle;
 {
  sleep 1;
  _pos = position _x;
+ //loot only if no zombies close
+ _nearEntities = _pos nearEntities 10;
+ _nearZombies = _nearEntities select {faction _x == "Ryanzombiesfaction"};
+ waitUntil{count _nearZombies == 0};
  if ((_pos select 0) + (_pos select 1) + (_pos select 2) != 0) then
  {
  _bot doMove (_pos);

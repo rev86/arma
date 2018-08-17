@@ -30,7 +30,7 @@ while {true} do
 
     if ( _locationZombiesSpawned != "true" && _unitsInLocation == "true") then
     {
-        _houseArray = _locationPos nearObjects ["house",_radius];
+        _houseArray = _locationPos nearObjects ["building",_radius];
         _houseArray = _houseArray call BIS_fnc_arrayShuffle;
         //spawn only on 1% of houses + 1 house
         _zHouses = _houseArray select [0,1+floor(random((count _houseArray)*0.01))];
