@@ -13,6 +13,7 @@ removeBackpack _newUnit;
 removeHeadgear _newUnit;
 removeGoggles _newUnit;
 
+_newUnit addEventHandler [ "Killed", {[_this select 0] execVM "respawn.sqf";}];
 [_newUnit] execVM "stalk.sqf";
 
 hint format ["Unit %1 respawned", name _unit];
