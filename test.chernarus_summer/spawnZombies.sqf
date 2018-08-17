@@ -32,8 +32,10 @@ while {true} do
     {
         _houseArray = _locationPos nearObjects ["house",_radius];
         _houseArray = _houseArray call BIS_fnc_arrayShuffle;
-        //_houseArray = _houseArray select [0,floor(random((count _houseArray)-1))];
-        _houseArray = _houseArray select [0,1];
+        //spawn only on 1% of houses + 1 house
+        _zHouses = _houseArray select [0,1+floor(random((count _houseArray)*0.01))];
+        hint format ["Will fill %1 houses from %2",count _zHouses,count _houseArray];
+        //_zHouses = _houseArray select [0,1];
 
         {
             _spawnPos = (getPosATL _x) findEmptyPosition [1,10];
@@ -41,16 +43,17 @@ while {true} do
             {
                 _zUnits = _zombies select [0,floor(random((count _zombies)-1))];
                 _zGroup = [ _spawnPos, INDEPENDENT, _zUnits,[],[],[],[],[],floor (random 360)] call BIS_fnc_spawnGroup;
-                //_zGroup deleteGroupWhenEmpty true;
+                [_zGroup,_locationPos,300]  call bis_fnc_taskPatrol;
+                _zGroup deleteGroupWhenEmpty true;
             }
-        } forEach _houseArray;
+        } forEach _zHouses;
 
         missionNamespace setVariable [_zombiesVar,"true"];
         hint format ["Zombies spawned at location %1!", _locationName]; sleep 1;
     };
-    if ( _locationZombiesSpawned != "true" && _unitsInLocation != "true") then
-    {
+//    if ( _locationZombiesSpawned != "true" && _unitsInLocation != "true") then
+//    {
 
-    };
+//    };
  }forEach _allLocations;
 };

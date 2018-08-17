@@ -33,6 +33,7 @@ if(isServer) then {
                        if (!alive _bot) exitWith{true};
                        while {true} do {
                            sleep 60;
+                           _allUnits = allUnits select {faction _x != "Ryanzombiesfaction"};
                            _nearEntities = _bot nearEntities 300;
                            _nearZombies = _nearEntities select {faction _x == "Ryanzombiesfaction"};
 
@@ -41,16 +42,16 @@ if(isServer) then {
                                _bot setBehaviour "CARELESS";
                                _bot doMove (_bot getVariable "destination");};};};
    } forEach _allUnits;
-   //clear abandoned zombies
+   //clear abandoned cities from zombies
   {_res21 = [_x] spawn {
                        _location = _this select 0;
                        while {true} do {
                           _locationName = text _location;
                           _zombiesVar = _locationName + "_zombiesSpawned";
                           _locationZombiesSpawned = missionNamespace getVariable _zombiesVar;
-                          if (_locationZombiesSpawned == "true" && count (((position _location) nearEntities 200) select {faction _x != "Ryanzombiesfaction"}) == 0) then
+                          if (_locationZombiesSpawned == "true" && count ((position _location) nearEntities ["Man",700] select {faction _x != "Ryanzombiesfaction"}) == 0) then
                           {
-                            _nearEntities = (position _location) nearEntities 200;
+                            _nearEntities = (position _location) nearEntities 700;
                             _nearZombies = _nearEntities select {faction _x == "Ryanzombiesfaction"};
                             {
                                 deleteVehicle _x;
@@ -67,10 +68,11 @@ if(isServer) then {
                       _bot = _this select 0;
                       if (!alive _bot) exitWith{true};
                       while {true} do {
+                          _allUnits = allUnits select {faction _x != "Ryanzombiesfaction"};
                           _oldPos = getPos _bot;
                           sleep 360;
                           _currentPos = getPos _bot;
-                          if (_oldPos distance2D _currentPos < 3) then {
+                          if (_oldPos distance2D _currentPos < 5) then {
                               hint format ["go go go! Your next destination is %1", _bot getVariable "destination"];
                               _bot setBehaviour "CARELESS";
                               _bot doMove (_bot getVariable "destination");};};};

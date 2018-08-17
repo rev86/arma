@@ -62,7 +62,7 @@ _nearbyLootHolders = _nearbyLootHolders call BIS_fnc_arrayShuffle;
       //_bot setCombatMode "YELLOW";
       _bot switchMove "AinvPknlMstpSnonWnonDnon_G01";
 
-      sleep (3 + floor (random (10)));
+      sleep (3 + floor (random (7)));
 
       _itemsInHolder = itemCargo _x;
       if (alive _bot && (count _itemsInHolder != 0)) then

@@ -8,6 +8,8 @@ _aeroPosition = getMarkerPos "aero";
 _azimuthToAero = _bot getDir _aeroPosition;
 _distanceToAero = _bot distance2D _aeroPosition;
 
+_bot setVariable["startPosition", position _bot];
+_bot addEventHandler [ "Killed", {[_this select 0] execVM "respawn.sqf";}];
 _closestVillages = [_bot, 50, _distanceToAero, "false"] call fncGetAll;
 //plan our route: determine places to visit
 {
